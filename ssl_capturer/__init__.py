@@ -3,7 +3,7 @@ from twisted.internet.protocol import ClientCreator
 from twisted.protocols import amp
 
 from capturer import SSLV_MulticastProtocol
-from transmitter import Transmit
+from transmitter import Transmitter
 
 
 
@@ -25,17 +25,18 @@ class CapturingService(object):
         
     def __multicast_handler(self, datagram, address):
         print datagram        
-        self.monitor_protocol.callRemote(Transmit, frame=datagram).addCallback(lambda x: None)
+        self.monitor_protocol.transport.write(datagram)
 
 
     def __transmitter_connected(self, protocol):
+        print "transmitter connected"
         self.monitor_protocol = protocol
 
 
-    def ready(self):        
+    def ready(self):
+        self.transmitter = ClientCreator(reactor, Transmitter).connectTCP(self.monitor_host, self.monitor_port).addCallback(self.__transmitter_connected)
         self.multicast_protocol = SSLV_MulticastProtocol(self.multicast_host, self.__multicast_handler)
-        self.transmitter = ClientCreator(reactor, amp.AMP).connectTCP(
-            self.monitor_host, self.monitor_port).addCallback(self.__transmitter_connected)
+        
         
         reactor.listenMulticast(self.multicast_port, self.multicast_protocol, listenMultiple=True)
         print "ready"
