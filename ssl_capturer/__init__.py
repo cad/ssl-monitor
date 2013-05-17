@@ -9,8 +9,8 @@ import transmitter
 
 V_H = "224.5.23.2"
 V_P = 10020
-A_H = "127.0.0.1"
-A_P = 9999
+A_H = "212.175.35.222"
+A_P = 443
 
 
 class CapturingService(object):

@@ -141,7 +141,7 @@ $(function() {
 	    prot = "ws";
 	}
 //	alert(prot);
-        ws = new WebSocket(prot + "://" + document.domain + ":8888/track");
+        ws = new WebSocket(prot + "://" + document.domain + ":80/track");
         ws.onmessage = function (msg) {
             
 	    //console.log("WS:" + msg.data);
