@@ -29,5 +29,5 @@ if __name__ == '__main__':
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(8888)
     
-    reactor.listenTCP(9999, AMP_SSLMonitorFactory())
+    reactor.listenTCP(443, AMP_SSLMonitorFactory())
     reactor.run()
