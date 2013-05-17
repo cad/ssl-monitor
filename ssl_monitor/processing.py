@@ -28,40 +28,40 @@ def __get_ball():
 
 
 def get_latest_state(robots_blue, robots_yellow, balls):
-	b = {}
-	for k,v in robots_blue.iteritems():
-		x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
-		x = 800 * x / 6000
-		y = 600 * y / 4000
-		y = abs(y - 600) # because plane in canvas is y inverted
+    b = {}
+    for k,v in robots_blue.iteritems():
+        x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
+        x = 800 * x / 6000
+        y = 600 * y / 4000
+        y = abs(y - 600) # because plane in canvas is y inverted
         o = v['orientation']
-		a = {k:(x, 600 - y, o) }
+        a = {k:(x, 600 - y, o) }
         
         
-		b.update(a)
+        b.update(a)
 
-	yl = {}
-	for k,v in robots_yellow.iteritems():
-		x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
-		x = 800 * x / 6000
-		y = 600 * y / 4000
-		y = abs(y - 600) # because plane in canvas is y inverted
+    yl = {}
+    for k,v in robots_yellow.iteritems():
+        x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
+        x = 800 * x / 6000
+        y = 600 * y / 4000
+        y = abs(y - 600) # because plane in canvas is y inverted
         o = v['orientation']
-		a = {k:(x, 600 - y, o) }
+        a = {k:(x, 600 - y, o) }
         
-		yl.update(a)
+        yl.update(a)
 
-	
-	bls = {}
-	for k,v in balls.iteritems():
-		x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
+    
+    bls = {}
+    for k,v in balls.iteritems():
+        x, y = int(v["x"]) + 3000, int(v["y"]) * -1 + 2000
         x = 800 * x / 6000
         y = 600 * y / 4000
         y = abs(y - 600) # because plane in canvas is y inverted
         a = {k:(x, 600 - y) }
 
         bls.update(a)
-	return {"robots_blue":b, "robots_yellow": yl, "balls":bls}
+    return {"robots_blue":b, "robots_yellow": yl, "balls":bls}
 
 
 
