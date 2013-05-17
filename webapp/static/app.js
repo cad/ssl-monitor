@@ -9,7 +9,9 @@ var HEIGHT = 600;
 function circle(x,y,r, str, color, orient) {
     drawTextAlongArc(ctx, str, x, y, r + 1, Math.PI)
     ctx.beginPath();
-    ctx.arc(x, y, r+2, 0, Math.PI /3, true);
+    //ctx.arc(x, y, r+2, orient - orient/2, orient + orient / 2, true);
+    //ctx.arc(x, y, r+2, 0, Math.PI /3, true);
+    ctx.arc(x, y, r+2,  orient - Math.PI/3 + Math.PI / 6, orient + Math.PI / 6, true);
     if (color == "robots_blue"){
 	
 	ctx.fillStyle="#3300CC";
@@ -20,7 +22,7 @@ function circle(x,y,r, str, color, orient) {
     ctx.fill();
     
     ctx.beginPath();
-    ctx.arc(x,y,r+5,Math.PI + orient, 2*Math.PI + orient, true);
+    ctx.arc(x,y,r+5, orient + Math.PI + Math.PI / 2, orient + Math.PI / 2, true);
     ctx.strokeStyle="#666666";
     ctx.lineWidth=3;
     ctx.stroke()
@@ -114,9 +116,7 @@ function draw(obj) {
     var blues = obj["blue"]
     var yellows = obj["yellow"]
     var balls = obj["balls"] 
-    console.log(obj);
     for (var k in obj){
-	console.log(k);
 	
 	for (var i in obj[k]) {
 
