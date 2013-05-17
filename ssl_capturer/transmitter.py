@@ -1,28 +1,16 @@
-from twisted.internet.protocol import Protocol, ClientFactory
-from sys import stdout
+from twisted.internet import reactor
+from twisted.protocols import amp
 
-class Transmitter(Protocol):
-    def dataReceived(self, data):
-        pass
-        
+class Push(amp.Command):
+    arguments = [('field_id', amp.String()),
+                 ('frame', amp.String())]
+    #response = [('status', amp.String())]
 
-class TransmitterFactory(ClientFactory):
-    
-    def __init__(self):
-        self.protocols = []
-    
-    def startedConnecting(self, connector):
-        print 'Started to connect.'
+def gotResult(result):
+    print 'total:', result['total']
+    #reactor.stop()
 
-    def buildProtocol(self, addr):
-        print 'Connected.'
-        protocol = Transmitter()
-        self.protocols.append(protocol)
-        return protocol
-
-    def clientConnectionLost(self, connector, reason):
-        print 'Lost connection.  Reason:', reason
-        
-    def clientConnectionFailed(self, connector, reason):
-        print 'Connection failed. Reason:', reason
-        
+def error(reason):
+    print "Something went wrong"
+    print reason
+    reactor.stop()
