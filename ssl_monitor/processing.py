@@ -34,7 +34,8 @@ def get_latest_state(robots_blue, robots_yellow, balls):
 		x = 800 * x / 6000
 		y = 600 * y / 4000
 		y = abs(y - 600) # because plane in canvas is y inverted
-		a = {k:(x, 600 - y) }
+        o = v['orientation']
+		a = {k:(x, 600 - y, o) }
         
         
 		b.update(a)
@@ -45,7 +46,8 @@ def get_latest_state(robots_blue, robots_yellow, balls):
 		x = 800 * x / 6000
 		y = 600 * y / 4000
 		y = abs(y - 600) # because plane in canvas is y inverted
-		a = {k:(x, 600 - y) }
+        o = v['orientation']
+		a = {k:(x, 600 - y, o) }
         
 		yl.update(a)
 

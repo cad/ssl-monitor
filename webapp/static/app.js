@@ -6,7 +6,7 @@ var dx = 2;
 var dy = 4;
 var WIDTH = 800;
 var HEIGHT = 600; 
-function circle(x,y,r, str, color) {
+function circle(x,y,r, str, color, orient) {
     drawTextAlongArc(ctx, str, x, y, r + 1, Math.PI)
     ctx.beginPath();
     ctx.arc(x, y, r+2, 0, Math.PI /3, true);
@@ -20,7 +20,7 @@ function circle(x,y,r, str, color) {
     ctx.fill();
     
     ctx.beginPath();
-    ctx.arc(x,y,r+5,Math.PI, 2*Math.PI, true);
+    ctx.arc(x,y,r+5,Math.PI + orient, 2*Math.PI + orient, true);
     ctx.strokeStyle="#666666";
     ctx.lineWidth=3;
     ctx.stroke()
@@ -114,7 +114,7 @@ function draw(obj) {
     var blues = obj["blue"]
     var yellows = obj["yellow"]
     var balls = obj["balls"] 
-
+    console.log(obj);
     for (var k in obj){
 	console.log(k);
 	
@@ -124,7 +124,7 @@ function draw(obj) {
 	    if (k == "balls"){
 		ball(obj[k][i][0], obj[k][i][1])
 	    } else {
-		circle(obj[k][i][0], obj[k][i][1], 10, i,k);
+		circle(obj[k][i][0], obj[k][i][1], 10, i,k, obj[k][i][2]);
 	    }
 	}    
     }
