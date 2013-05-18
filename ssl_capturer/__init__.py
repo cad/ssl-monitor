@@ -1,3 +1,4 @@
+import sys
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.protocols import amp
@@ -5,8 +6,8 @@ from twisted.protocols import amp
 from capturer import SSLV_MulticastProtocol
 from transmitter import Push
 import transmitter
-
-
+from pcap import Replayer
+print sys.argv
 V_H = "224.5.23.2"
 V_P = 10020
 A_H = "212.175.35.222"
@@ -22,7 +23,7 @@ class CapturingService(object):
         self.monitor_host = monitor_host
         self.monitor_port = monitor_port
         self.field_id = 'field-1'
-        
+        self.monitor_protocol = None
         
     def __multicast_handler(self, datagram, address):
         self.monitor_protocol.callRemote(Push, field_id=self.field_id, frame=datagram)
@@ -39,7 +40,16 @@ class CapturingService(object):
             self.monitor_host, self.monitor_port).addCallback(self.__transmitter_connected).addErrback(transmitter.error)
 
         self.multicast_protocol = SSLV_MulticastProtocol(self.multicast_host, self.__multicast_handler)
-        reactor.listenMulticast(self.multicast_port, self.multicast_protocol, listenMultiple=True)
+        # wheter we are replaying from pcap or not
+        if len(sys.argv) > 1:
+            if sys.argv[1] == 'pcap':
+                print 'Switching to replay mode'
+                pcap = sys.argv[2]
+                replayer = Replayer(pcap)
+                replayer.replay_packets(self.__multicast_handler)
+                
+        else:
+            reactor.listenMulticast(self.multicast_port, self.multicast_protocol, listenMultiple=True)
         print "ready"
 
 
