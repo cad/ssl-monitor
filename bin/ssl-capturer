@@ -48,8 +48,8 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args() # TODO: further validate args here
-    
-    sys.path.append('/home/cad/Workspace/neu-ws/neu-neuislanders/ssl-monitor/')
+    path = os.path.join(os.path.dirname(os.path.join(os.path.realpath(__file__))), '..')
+    sys.path.append(path)
     import ssl_capturer
     
     if args.live:
