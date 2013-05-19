@@ -7,12 +7,6 @@ from capturer import SSLV_MulticastProtocol
 from transmitter import Push
 import transmitter
 from pcap import Replayer
-print sys.argv
-V_H = "224.5.23.2"
-V_P = 10020
-A_H = "212.175.35.222"
-A_P = 443
-
 
 class CapturingService(object):
     """"""
