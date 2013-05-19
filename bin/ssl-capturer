@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+import os, sys
+import argparse
+
+parser = argparse.ArgumentParser(description="Captures SSL-VISION packets and sends them to a monitoring server", add_help=True)
+
+def parse_uri(uri):
+    'amp://192.168.1.1:2000'
+    decomposed = uri.replace('/', '').split(":")
+    return {'protocol':decomposed[0], 'host':decomposed[1], 'port':int(decomposed[2])}
+
+def get_args():
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-l','--live', dest='live', action='store_true', help="capture and broadcast the game in real-time.")
+    group.add_argument('-r','--replay', dest='replay' , action='store_true', help="replay from a pcap file.")
+
+
+    parser.add_argument("-n", '--field-name', type=str,
+                        help="a unique field name e.g. neu-islanders-field-a", required=True)
+
+    live_group = parser.add_argument_group("live capturing")
+    replay_group = parser.add_argument_group("replaying")
+
+    
+    parser.add_argument("-m", '--monitor-uri', type=str, dest='server_uri',
+                        help="ssl-monitor server uri e.g. amp://{server_ip}:{server_port}", required=True)
+    
+    live_group.add_argument("--vision-host", type=str, dest='vision_host',
+                            help="vision's multicast address")
+
+    live_group.add_argument("--vision-port", type=int, dest='vision_port',
+                            help="vision's multicast port")
+    
+    replay_group.add_argument("--pcap-file", type=str, dest='pcap_path',
+                          help="path to pcap file")
+    
+    args = parser.parse_args()
+    # optionality
+    if args.live and not(args.vision_port and args.vision_host):
+        print parser.print_help()
+        sys.exit(1)
+    
+    if args.replay and not(args.pcap_path):
+        print parser.print_help()
+        sys.exit(1)
+    return args
+
+
+if __name__ == '__main__':
+    args = get_args() # TODO: further validate args here
+    
+    sys.path.append('/home/cad/Workspace/neu-ws/neu-neuislanders/ssl-monitor/')
+    import ssl_capturer
+    
+    if args.live:
+        uri = parse_uri(args.server_uri)
+        service = ssl_capturer.CapturingService(args.vision_host, args.vision_port, uri['host'], uri['port'], mode='live')
+        service.ready()
+        print "Capturing Started"
+        service.run()
+
+
+    if args.replay:
+        uri = parse_uri(args.server_uri)
+        service = ssl_capturer.CapturingService(None, None, uri['host'], uri['port'], mode='pcap', pcap=args.pcap_path)
+        service.ready()
+        print "Replaying Started"
+        service.run()
+
