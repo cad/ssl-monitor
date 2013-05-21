@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div>
+  <h1>Replays</h1>
+  <p>You can upload your pre-recorded games as <b>pcap</b> files. System replays them for you.</p>
+  e.g. <code>sudo tcpdump -i eth0 -s0 -vv -n host 224.5.23.2 and dst port 10020 -w dump.pcap</code> you can record your ongoing game.
+</div>
+<br>
+<div class="well">
+  <form action="" method="POST" enctype="multipart/form-data">
+    <fieldset>
+      <label class="text">
+	pcap file <input type="file" name="file" size="50000">
+      </label>
+      <button type="submit" class="btn">Upload</button>
+    </fieldset>
+  </form>
+</div>
+{% endblock container %}
