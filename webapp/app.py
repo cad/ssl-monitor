@@ -59,7 +59,7 @@ def replay(field_name=None):
             print "Proccess has been spawned!"
 
             return redirect(url_for('game',
-                                    fieldname=filename))
+                                    field_name=filename))
             
     return render_template("replay.html")
 
