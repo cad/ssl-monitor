@@ -35,7 +35,7 @@ def replay():
             filename = secure_filename(str(session['uid']))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('game',
-                                    filename=filename))
+                                    fieldname=filename))
             
     return render_template("replay.html")
 
@@ -43,10 +43,12 @@ def replay():
 @app.route("/ssl-monitor/game/")
 def game():
     if request.method == 'GET':
-        if 'filename' in request.args:
-            return request.args.get('filename')
+        fieldname = None
+        if 'fieldname' in request.args:
+            fieldname = request.args.get('fieldname')
+            return render_template("game.html", fieldname)
 
-    return render_template("game.html")
+    return render_template("405.html", fieldname)
 
 if __name__ == "__main__":
     app.secret_key = 'bill gates is gay!'
