@@ -21,8 +21,9 @@ class AMP_SSLMonitorProtocol(amp.AMP):
     def PUSH(self, field_id, frame):
         d = sanitize_packet(frame) 
 
-        for i in sockets:
-            i.write_message(json.dumps(d))
+        if field_id in sockets:
+            for i in sockets[field_id]:
+                i.write_message(json.dumps(d))
         return {'status':'ok'}
 
 

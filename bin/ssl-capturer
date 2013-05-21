@@ -15,7 +15,7 @@ def get_args():
     group.add_argument('-r','--replay', dest='replay' , action='store_true', help="replay from a pcap file.")
 
 
-    parser.add_argument("-n", '--field-name', type=str,
+    parser.add_argument("-n", '--field-name', type=str, dest='field_name'
                         help="a unique field name e.g. neu-islanders-field-a", required=True)
 
     live_group = parser.add_argument_group("live capturing")
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     
     if args.live:
         uri = parse_uri(args.server_uri)
-        service = ssl_capturer.CapturingService(args.vision_host, args.vision_port, uri['host'], uri['port'], mode='live')
+        service = ssl_capturer.CapturingService(args.field_name, args.vision_host, args.vision_port, uri['host'], uri['port'], mode='live')
         service.ready()
         print "Capturing Started"
         service.run()
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     if args.replay:
         uri = parse_uri(args.server_uri)
-        service = ssl_capturer.CapturingService(None, None, uri['host'], uri['port'], mode='pcap', pcap=args.pcap_path)
+        service = ssl_capturer.CapturingService(args.field_name, None, None, uri['host'], uri['port'], mode='pcap', pcap=args.pcap_path)
         service.ready()
         print "Replaying Started"
         service.run()

@@ -17,12 +17,12 @@ A_P = 443
 class CapturingService(object):
     """"""
     
-    def __init__(self, multicast_host, multicast_port, monitor_host, monitor_port, mode='live', pcap=None):
+    def __init__(self, field_id, multicast_host, multicast_port, monitor_host, monitor_port, mode='live', pcap=None):
         self.multicast_host = multicast_host
         self.multicast_port = multicast_port
         self.monitor_host = monitor_host
         self.monitor_port = monitor_port
-        self.field_id = 'field-1'
+        self.field_id = field_id
         self.monitor_protocol = None
         self.mode = mode
         self.pcap_f = pcap
