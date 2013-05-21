@@ -39,7 +39,7 @@ class GameHandler(tornado.websocket.WebSocketHandler):
     
             
     def on_message(self, msg):
-        print "WebSocket message", msg
+        pass
         
     def on_close(self):
         sockets[self.field_name].remove(self)
