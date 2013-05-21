@@ -54,7 +54,7 @@ def replay():
             file.save(file_path)
             # saved
                 
-            p = Process(target=run_capturer, args=(filename, file_path))
+            p = Process(target=spawn_capturer, args=(filename, file_path))
             p.start()
             print "Proccess has been spawned!"
 
