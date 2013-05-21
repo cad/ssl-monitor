@@ -34,9 +34,13 @@ class Replayer(object):
 
     def replay_packets(self, callback):
         margin = self.packet_index[0][0]
+        last_tstamp = None
         for packet in self.packet_index:
             tdelta = packet[0] - margin
+            last_tstamp = tdelta
             reactor.callLater(tdelta, callback, packet[1], '127.0.0.1')
+        reactor.callLater(last_tstamp, reactor.stop)
+        
             
         
         
