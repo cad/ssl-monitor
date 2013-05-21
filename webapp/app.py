@@ -70,9 +70,9 @@ def game():
         fieldname = None
         if 'fieldname' in request.args:
             fieldname = request.args.get('fieldname')
-            return render_template("game.html", fieldname)
+            return render_template("game.html", fieldname=fieldname)
 
-    return render_template("405.html", fieldname)    
+    return render_template("405.html")    
 
 
 if __name__ == "__main__":
