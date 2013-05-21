@@ -69,7 +69,6 @@ def game(field_name=None):
     if request.method == 'GET':
         fieldname = field_name
         if field_name:
-            fieldname = request.args.get('fieldname')
             return render_template("game.html", fieldname=fieldname)
 
     return "Bad request", 400
