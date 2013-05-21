@@ -42,7 +42,7 @@ def index():
 
 
 @app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
-def replay():
+def replay(field_name=None):
     if not session.get('uid', None):
         session['uid'] = uuid.uuid4().hex
 
@@ -64,7 +64,7 @@ def replay():
     return render_template("replay.html")
 
 
-@app.route("/ssl-monitor/game/")
+@app.route("/ssl-monitor/game/<field_name>")
 def game():
     if request.method == 'GET':
         fieldname = None
