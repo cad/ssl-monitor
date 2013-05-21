@@ -15,7 +15,7 @@ def get_args():
     group.add_argument('-r','--replay', dest='replay' , action='store_true', help="replay from a pcap file.")
 
 
-    parser.add_argument("-n", '--field-name', type=str, dest='field_name'
+    parser.add_argument("-n", '--field-name', type=str, dest='field_name',
                         help="a unique field name e.g. neu-islanders-field-a", required=True)
 
     live_group = parser.add_argument_group("live capturing")
