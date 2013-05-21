@@ -29,7 +29,7 @@ class GameHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         self.field_name = self.get_argument("fieldname", None, True)
-        print self.field_name
+        #print self.field_name
         field_socket = sockets.get(self.field_name, None)
         if not field_socket:
             sockets[self.field_name] = [self,]

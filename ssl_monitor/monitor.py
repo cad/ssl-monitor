@@ -20,7 +20,6 @@ class AMP_SSLMonitorProtocol(amp.AMP):
     @Push.responder
     def PUSH(self, field_id, frame):
         d = sanitize_packet(frame)
-        print sockets
 
         if field_id in sockets:
             for i in sockets[field_id]:
