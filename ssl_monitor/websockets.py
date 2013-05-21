@@ -25,17 +25,19 @@ class GameHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
         self.field_name = None
         super(GameHandler, self).__init__(*args, **kwargs)
-        
-        
+
+
     def open(self):
         self.field_name = self.get_argument("fieldname", None, True)
         print self.field_name
-        if not field_name in sockets:
+        field_socket = sockets.get(self.field_name, None)
+        if not field_socket:
             sockets[self.field_name] = [self,]
         else:
             sockets[self.field_name].append(self)
-        print "WebSocket opened"
-        
+        print "WebSocket opened"  
+    
+            
     def on_message(self, msg):
         print "WebSocket message", msg
         
