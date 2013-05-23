@@ -10,6 +10,7 @@ UPLOAD_FOLDER = '/tmp/'
 ALLOWED_EXTENSIONS = set(['pcap'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 800 * 1024 * 1024
 
 
 def allowed_file(filename):
@@ -41,12 +42,12 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
+@app.route("/ssl-monitor/replay/", methods=['PUT', 'GET'])
 def replay():
     if not session.get('uid', None):
         session['uid'] = uuid.uuid4().hex
 
-    if request.method == 'POST':
+    if request.method == 'PUT':
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(str(session['uid']))
