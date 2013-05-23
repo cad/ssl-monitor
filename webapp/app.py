@@ -42,7 +42,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/ssl-monitor/replay/", methods=['PUT', 'GET'])
+@app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
 def replay():
     if not session.get('uid', None):
         session['uid'] = uuid.uuid4().hex
