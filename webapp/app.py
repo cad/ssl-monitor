@@ -47,7 +47,7 @@ def replay():
     if not session.get('uid', None):
         session['uid'] = uuid.uuid4().hex
 
-    if request.method == 'PUT':
+    if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(str(session['uid']))
