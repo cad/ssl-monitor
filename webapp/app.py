@@ -1,16 +1,27 @@
 import os
-from multiprocessing import Process
-from flask import Flask, render_template, request, session, redirect, url_for
-from werkzeug import secure_filename
 import uuid
 
+from multiprocessing import Process
+
+from flask import Flask, render_template, request, session, redirect, url_for
+from werkzeug import secure_filename
+from pymongo import MongoClient
+
+from session import MongoSessionInterface
+import forms
+from auth import *
+import auth
+
 app = Flask(__name__)
+app.session_interface = MongoSessionInterface(db='ssl_monitor')
 
 UPLOAD_FOLDER = '/tmp/'
 ALLOWED_EXTENSIONS = set(['pcap'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 800 * 1024 * 1024
+
+dbc = MongoClient("127.0.0.1") # MongoDB Client
 
 
 def allowed_file(filename):
@@ -42,6 +53,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/ssl-monitor/dashboard/")
+def dashboard():
+    return "Dashboard Here! <br> User: %s" % session['user']
+
+
 @app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
 def replay():
     if not session.get('uid', None):
@@ -64,6 +80,47 @@ def replay():
             
     return render_template("replay.html")
 
+
+@app.route("/ssl-monitor/login/", methods=['POST', 'GET'])
+def login_user():
+    form = forms.LoginForm()
+    if request.method == 'POST':
+        form = forms.LoginForm(request.form)
+        if form.validate():
+            print 
+            result = auth.login(form.email.data, form.password.data)
+            if result:
+                flash("You have successfully logged in!", 'success')
+                return redirect(url_for("dashboard"))
+            else:
+                flash("Your email or password is wrong!", 'error')
+                
+
+    return render_template("login.html", form=form)
+
+
+@app.route("/ssl-monitor/register/", methods=['POST', 'GET'])
+def register():
+    form = forms.UserRegistrationForm()
+    if request.method == 'POST':
+        form = forms.UserRegistrationForm(request.form)
+        if form.validate():
+            team = { 
+                'email': form.email.data,
+                'name': form.name.data,
+                'team': form.team.data,
+                'country': form.country.data,
+                'password': salted_hash(form.password.data),
+            }
+            if not dbc.ssl_monitor.users.find_one({'email':team['email']}):
+                dbc.ssl_monitor.users.insert(team)
+                flash("Successfully registered!")
+                return redirect(url_for("dashboard"))
+            flash("Sorry that email address is already exists!", 'error')
+    
+    return render_template("register.html", form=form)
+        
+    
 
 @app.route("/ssl-monitor/game/<field_name>")
 def game(field_name=None):

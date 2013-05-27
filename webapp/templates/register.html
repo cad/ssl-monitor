@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div>
+  <h1>register</h1>
+</div>
+<br>
+<div class="well">
+  <form action="" method="POST">
+    {% for field in form %}
+        {{ field.label }} {{ field }} {% for error in field.errors %} {{ error }} {% endfor %}
+    {% endfor %}
+    <br>
+    <input type="submit" value="Login">
+  </form>
+</div>
+
+{% endblock container %}
