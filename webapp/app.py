@@ -54,11 +54,13 @@ def index():
 
 
 @app.route("/ssl-monitor/dashboard/")
+@login_required
 def dashboard():
     return "Dashboard Here! <br> User: %s" % session['user']
 
 
 @app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
+@login_required
 def replay():
     if not session.get('uid', None):
         session['uid'] = uuid.uuid4().hex
@@ -97,6 +99,13 @@ def login_user():
                 
 
     return render_template("login.html", form=form)
+
+
+@app.route("/ssl-monitor/logout/")
+def logout_user():
+    auth.logout()
+    flash("You have succesfully logged out!", 'warning')
+    return redirect(url_for("login_user"))
 
 
 @app.route("/ssl-monitor/register/", methods=['POST', 'GET'])
