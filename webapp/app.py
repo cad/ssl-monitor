@@ -91,7 +91,7 @@ def replay():
             #print "Proccess has been spawned!"
 
             return redirect(url_for('game',
-                                    field_name=filename))
+                                    field_name=filename, replay="1"))
     pcaps = db.uploads.find(sort=[('$natural',-1)], limit=50) # last 50 pcaps in reverse order
     return render_template("replay.html", games = pcaps)
 
