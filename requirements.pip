@@ -1,9 +1,11 @@
 Flask==0.9
 Jinja2==2.6
 Twisted==13.0.0
+WTForms==1.0.4
 Werkzeug==0.8.3
 dpkt==1.7
 protobuf==2.5.0
+pymongo==2.5.1
 scapy==2.2.0
 tornado==3.0.1
 wsgiref==0.1.2
