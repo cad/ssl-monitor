@@ -45,8 +45,13 @@
               <li class="active"><a href="/ssl-monitor/">Dashboard</a></li> 
               <li><a href="/ssl-monitor/live/">Live</a></li>
 	      <li><a href="/ssl-monitor/replay/">Replays</a></li>
+	    </ul>
+	    <ul class="nav pull-right">
 	      <li>{% if session.logged_in %}<a href="/ssl-monitor/logout/">Logout</a>{% else %}<a href="/ssl-monitor/login/" >Login</a>{% endif %}</li>
+	      <li class="divider-vertical"></li>
 	      <li>{% if not session.logged_in %}<a href="/ssl-monitor/register/">Register</a>{% endif %}</li>
+              </li>
+	      
             </ul>
           </div><!--/.nav-collapse -->
         </div>
