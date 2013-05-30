@@ -1,5 +1,6 @@
 import os
 import uuid
+import datetime
 
 from multiprocessing import Process
 
@@ -22,7 +23,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 800 * 1024 * 1024
 
 dbc = MongoClient("127.0.0.1") # MongoDB Client
-
+db = dbc.ssl_monitor
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -56,8 +57,12 @@ def index():
 @app.route("/ssl-monitor/dashboard/")
 @login_required
 def dashboard():
+    return redirect(url_for('index'))
     return "Dashboard Here! <br> User: %s" % session['user']
 
+@app.route("/ssl-monitor/live/", methods=['GET'])
+def live():
+    return render_template("live.html")
 
 @app.route("/ssl-monitor/replay/", methods=['POST', 'GET'])
 @login_required
@@ -68,19 +73,27 @@ def replay():
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
-            filename = secure_filename(str(session['uid']))
+            filename = secure_filename(str(uuid.uuid4().hex)+'.pcap')
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            # saved
-                
-            p = Process(target=spawn_capturer, args=(filename, file_path))
-            p.start()
-            print "Proccess has been spawned!"
+            # pcap saved
+            pcap = {
+                'file_name':filename,
+                'file_path': file_path,
+                'uploader': session['user']['email'],
+                'uploaded_at': datetime.datetime.now(),
+            }
+            
+            db.uploads.insert(pcap)
+            # upload inserted to db                
+            #p = Process(target=spawn_capturer, args=(filename, file_path))
+            #p.start()
+            #print "Proccess has been spawned!"
 
             return redirect(url_for('game',
                                     field_name=filename))
-            
-    return render_template("replay.html")
+    pcaps = db.uploads.find(sort=[('$natural',-1)], limit=50) # last 50 pcaps in reverse order
+    return render_template("replay.html", games = pcaps)
 
 
 @app.route("/ssl-monitor/login/", methods=['POST', 'GET'])
@@ -136,6 +149,12 @@ def game(field_name=None):
     if request.method == 'GET':
         fieldname = field_name
         if field_name:
+            if request.args.get('replay', None) == '1':
+                file_name = field_name
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], field_name)
+                p = Process(target=spawn_capturer, args=(file_name, file_path))
+                p.start()
+                
             return render_template("game.html", fieldname=fieldname)
 
     return "Bad request", 400

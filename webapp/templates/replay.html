@@ -17,5 +17,28 @@
       <button type="submit" class="btn">Upload</button>
     </fieldset>
   </form>
+
+  <!-- Old Replays -->
+  <h3>Uploaded pcaps</h3>
+  <div id="replays">
+    <table class="table">
+      <thead>
+	<tr>
+	  <th>file name</th>
+	  <th>date</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for game in games %}
+	<tr>
+	  <td><a href="/ssl-monitor/game/{{ game['file_name'] }}?replay=1">{{ game['file_name'] }}</a></td>
+	  <td>{{ game['uploaded_at'] }}</td>
+	</tr>
+	
+	{% endfor %}
+      </tbody>
+    </table>
+  </div><!-- #/replays -->
+
 </div>
 {% endblock container %}
